@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Choose and Choose · PDP</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="proto-bar">
+  <strong>Choose and Choose · wireframe</strong>
+  <a href="index.html">All scenarios</a>
+  <a href="pdp.html?s=1" data-s="1">1 · One product, few gifts</a>
+  <a href="pdp.html?s=2" data-s="2">2 · Many products, one gift</a>
+  <a href="pdp.html?s=3" data-s="3">3 · Many products, many gifts</a>
+  <a href="pdp-mobile.html?s=1" data-view>Mobile view</a>
+  <a href="bag.html?s=1" data-bag>Basket</a>
+  <button type="button" data-notes>Toggle notes</button>
+  <button type="button" data-reset>Reset</button>
+</div>
+
+<div class="promo-strip">PROMO STRIP</div>
+<header class="site-header">
+  <div class="inner">
+    <button class="icon-btn" aria-label="Menu"><svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
+    <div class="logo">LOGO</div>
+    <div class="icons">
+      <button class="icon-btn" aria-label="Search"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg></button>
+      <button class="icon-btn" aria-label="Account"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-4 4-6 8-6s7 2 8 6"/></svg></button>
+      <a class="icon-btn bag-link" id="bag-link" href="bag.html" aria-label="Basket"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M5 8h14l-1 13H6L5 8z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg><span class="bag-count" id="bag-count" hidden></span></a>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <nav class="crumbs" aria-label="Breadcrumb">Oriflame Cosmetics UK / Hair / Shop by product / Hair oil / <span>Protecting Hair Oil</span></nav>
+
+  <div class="hero">
+    <div class="gallery">
+      <div class="thumbs"><div class="thumb active"></div><div class="thumb"></div><div class="thumb"></div><div class="thumb"></div></div>
+      <div class="ph main-image">PRODUCT IMAGE</div>
+    </div>
+
+    <div class="buybox">
+      <div class="brand">ELEO</div>
+      <h1>Protecting Hair Oil</h1>
+      <div class="meta">★★★★★ (ratings) · <a href="#reviews">Read all reviews</a></div>
+      <div class="meta">38601 · 50 ml</div>
+      <div class="price">£11.99</div>
+      <div class="offer-line" id="offer-line"></div>
+      <div class="buy-row">
+        <div class="stepper" id="qty"></div>
+        <button type="button" class="btn-primary" id="buy">ADD TO BASKET</button>
+      </div>
+
+      <div class="meta">Our lowest price, the last 30 days before current price, was £11.99</div>
+      <div class="delivery">
+        <span>Free delivery for VIPs for orders above £45</span>
+        <span>Delivery time: UK 2-3 business days</span>
+        <span>Payment methods: [ICONS]</span>
+      </div>
+      <section class="unlock" id="unlock" aria-labelledby="unlock-title"></section>
+      <div class="vip">
+        <strong>Become a VIP customer, enjoy the benefits!</strong>
+        <span>15% off your first order · Free shipping above £45 · Beauty Reward Points</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="tabs" role="tablist">
+    <button role="tab" aria-selected="true">DESCRIPTION</button>
+    <button role="tab" aria-selected="false">HOW TO USE</button>
+    <button role="tab" aria-selected="false">INGREDIENTS</button>
+    <button role="tab" aria-selected="false">SHIPPING</button>
+  </div>
+  <div class="lines"><div style="width:100%"></div><div style="width:92%"></div><div style="width:70%"></div></div>
+
+  <section class="related" aria-label="Others also bought">
+    <h2>Others also bought</h2>
+    <div class="grid"><div class="ph"></div><div class="ph"></div><div class="ph"></div><div class="ph"></div><div class="ph"></div></div>
+  </section>
+</main>
+
+<div class="overlay" id="u-overlay" hidden>
+  <button type="button" class="backdrop" aria-label="Close" tabindex="-1"></button>
+  <div class="panel" id="u-panel" role="dialog" aria-modal="true" aria-labelledby="u-panel-title"></div>
+</div>
+<div class="toast" id="toast" role="status" hidden></div>
+
+<script src="offer.js"></script>
+<script src="unified.js"></script>
+<script>
+  if (window.top !== window) document.body.classList.add('embed');
+  document.title = 'Choose and Choose · Scenario ' + SC;
+  document.getElementById('bag-link').href = 'bag.html?s=' + SC;
+  document.querySelector('.proto-bar [data-s="' + SC + '"]').setAttribute('aria-current', 'page');
+  document.querySelector('.proto-bar [data-view]').href = 'pdp-mobile.html?s=' + SC;
+  document.querySelector('.proto-bar [data-bag]').href = 'bag.html?s=' + SC;
+  initProtoBar();
+  initUnified({ overlayId: 'u-overlay', panelId: 'u-panel' });
+</script>
+</body>
+</html>

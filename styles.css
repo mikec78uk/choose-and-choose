@@ -206,7 +206,7 @@ h1, h2, h3 { margin: 0; font-weight: 400; color: var(--strong); }
 .note { display: inline-flex; width: 22px; height: 22px; border-radius: 50%; background: var(--note); color: #fff; font-size: 11px; font-weight: 600; align-items: center; justify-content: center; flex: none; }
 body:not(.show-notes) .note { display: none; }
 
-/* On-page version: "Claim as a free gift" carousel (Choose and Get pattern) */
+/* Unified version: buy box pieces and the Choose and Get product card */
 .offer-line { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; font-size: 14px; }
 .offer-line a { font-size: 13px; }
 .buy-row { display: flex; gap: 12px; }
@@ -216,12 +216,6 @@ body:not(.show-notes) .note { display: none; }
 .bag-link { position: relative; color: var(--ink); }
 .bag-count { position: absolute; top: 4px; right: 2px; min-width: 18px; height: 18px; border-radius: 9px; background: var(--strong); color: #fff; font-size: 11px; display: flex; align-items: center; justify-content: center; padding: 0 4px; }
 .bag-count[hidden] { display: none; }
-.claim { margin-top: 64px; }
-.claim-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; margin-bottom: 20px; }
-.claim-head h2 { font-size: 28px; font-weight: 300; display: flex; align-items: center; gap: 8px; }
-.claim-sub { margin: 6px 0 0; font-size: 16px; }
-.claim-status { margin-top: 10px; font-size: 14px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-.claim-status .ok { color: var(--success); }
 .arrows { display: flex; gap: 12px; flex: none; }
 .arrow { width: 48px; height: 48px; border-radius: 50%; border: 1px solid var(--strong); background: #fff; font-size: 22px; line-height: 1; cursor: pointer; }
 .arrow:disabled { border-color: var(--line); background: var(--line); color: var(--muted); }
@@ -229,8 +223,6 @@ body:not(.show-notes) .note { display: none; }
 .cards::-webkit-scrollbar { display: none; }
 .card { flex: 0 0 260px; scroll-snap-align: start; display: flex; flex-direction: column; gap: 6px; }
 .card-media { position: relative; height: 260px; background: var(--subtle); border: 2px solid transparent; display: flex; align-items: center; justify-content: center; font-size: 11px; letter-spacing: .1em; color: var(--placeholder); }
-.card.selected .card-media { border-color: var(--strong); }
-.card.gift-hero .card-media { background: var(--offer-soft); border: 1px dashed var(--line-strong); }
 .card-badges { position: absolute; top: 10px; left: 10px; display: flex; flex-direction: column; align-items: flex-start; gap: 4px; }
 .card-badge { background: var(--offer); color: #000; font-size: 11px; font-weight: 500; letter-spacing: .04em; padding: 3px 6px; }
 .card-badge.dark { background: var(--strong); color: #fff; }
@@ -239,7 +231,7 @@ body:not(.show-notes) .note { display: none; }
 .card.in-basket .card-media { border-color: var(--success); }
 .card.viewing.in-basket .card-media { border-color: var(--strong); }
 
-/* Scenario 2: "Unlock your gift" in the buy box; gift and products in one box */
+/* "Unlock your gift" box: gift panel with basket slots, then scenario-specific contents */
 .unlock { border-top: 1px solid var(--line); padding-top: 24px; display: flex; flex-direction: column; gap: 14px; }
 .unlock[hidden] { display: none; }
 .unlock-title { font-size: 22px; font-weight: 300; display: flex; align-items: center; gap: 8px; }
@@ -276,17 +268,71 @@ body:not(.show-notes) .note { display: none; }
 .card-name:hover { text-decoration: underline; }
 .card-price { font-size: 15px; color: var(--strong); }
 .card-price .was { font-size: 13px; color: var(--muted); }
-.card-note { font-size: 13px; color: var(--success); }
 .toast { position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%); z-index: 30; background: var(--strong); color: #fff; padding: 12px 16px; display: flex; gap: 16px; align-items: center; font-size: 14px; max-width: calc(100% - 32px); }
 .toast[hidden] { display: none; }
 .toast a { color: #fff; white-space: nowrap; }
 .phone-frame { width: 100%; height: 100%; border: 0; display: block; }
 .embed .proto-bar { display: none !important; }
 
+.unlock-status.todo { color: var(--strong); font-weight: 500; }
+.unlock-section { padding: 16px; display: flex; flex-direction: column; gap: 12px; }
+.unlock-section-head { display: flex; justify-content: space-between; font-size: 16px; color: var(--strong); }
+.muted { color: var(--muted); font-size: 14px; }
+.io-terms { font-size: 12px; color: var(--muted); }
+
+/* Gift tile with an explicit Choose control */
+.gtiles { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+.gtile { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.gtile-img { height: 96px; border: 2px solid transparent; font-size: 10px; }
+.gtile.chosen .gtile-img { border-color: var(--strong); background: var(--offer-soft); }
+.gtile-name { font-size: 13px; color: var(--strong); }
+.gtile-worth { font-size: 11px; color: var(--muted); }
+.choose-btn { min-height: 40px; border: 1px solid var(--strong); background: #fff; color: var(--strong); font-size: 13px; letter-spacing: .04em; cursor: pointer; margin-top: 2px; }
+.choose-btn[aria-pressed="true"] { background: var(--strong); color: #fff; }
+.choose-btn:disabled { border-color: var(--line); color: var(--muted); }
+.gtile .link-btn { align-self: flex-start; font-size: 12px; min-height: 28px; }
+.drawer-gifts { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+
+/* Scenario 3 summary in the box */
+.sum-row { display: flex; gap: 12px; font-size: 14px; }
+.sum-label { flex: 0 0 72px; color: var(--muted); }
+.gift-peek { display: flex; gap: 6px; align-items: center; }
+.gift-peek .ph { width: 40px; height: 40px; }
+.peek-more { font-size: 12px; color: var(--muted); }
+.unlock-summary .btn-outline { width: 100%; }
+
+/* Badges in drawer rows and details */
+.product-row.viewing { border: 2px solid var(--strong); }
+.product-row.in-basket { border: 2px solid var(--success); }
+.product-row.viewing.in-basket { border-color: var(--strong); }
+.row-badges { display: flex; flex-wrap: wrap; gap: 4px; }
+.row-badges .card-badge { font-size: 10px; padding: 2px 5px; }
+.card-badges.inline { position: static; flex-direction: row; }
+.drawer-progress { margin: 0 0 8px; border: 1px solid var(--line); }
+.foot-actions { display: flex; gap: 10px; }
+.foot-actions > * { flex: 1 1 0; }
+.btn-outline { display: flex; align-items: center; justify-content: center; text-decoration: none; }
+.grabber { display: none; }
+
+/* Landing page */
+.landing { max-width: 760px; margin: 0 auto; padding: 48px 16px 64px; display: flex; flex-direction: column; gap: 16px; align-items: flex-start; }
+.landing h1 { font-size: 34px; font-weight: 300; }
+.lead { margin: 0; font-size: 16px; line-height: 1.6; }
+.scenarios { list-style: none; margin: 8px 0; padding: 0; display: flex; flex-direction: column; gap: 16px; width: 100%; }
+.scenarios li { display: flex; gap: 16px; border: 1px solid var(--line-strong); padding: 20px; }
+.scenarios h2 { font-size: 20px; font-weight: 400; }
+.scenarios p { margin: 6px 0 0; font-size: 14px; line-height: 1.5; }
+.sc-num { flex: none; width: 36px; height: 36px; border-radius: 50%; background: var(--offer); color: #000; display: flex; align-items: center; justify-content: center; font-weight: 500; }
+.sc-links { display: flex; gap: 10px; margin-top: 12px !important; }
+.sc-links a { min-height: 44px; padding: 0 20px; font-size: 13px; letter-spacing: .1em; }
+
 @media (max-width: 640px) {
+  .grabber { display: flex; }
+  .overlay { align-items: flex-end; }
+  .panel { height: calc(100% - 40px); }
+  .gtiles { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .drawer-gifts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .hide-sm { display: none; }
-  .claim-head h2 { font-size: 22px; }
-  .claim-sub { font-size: 14px; }
   .arrows { display: none; }
   .card, .cards.compact .card { flex-basis: 72%; }
   .unlock-gift-img { width: 72px; height: 72px; }

@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Choose and Choose · PDP · Mobile</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="proto-bar">
+  <strong>Choose and Choose · wireframe</strong>
+  <a href="index.html">All scenarios</a>
+  <a href="pdp.html?s=1" data-s="1">1 · One product, few gifts</a>
+  <a href="pdp.html?s=2" data-s="2">2 · Many products, one gift</a>
+  <a href="pdp.html?s=3" data-s="3">3 · Many products, many gifts</a>
+  <a href="pdp-mobile.html?s=1" data-view>Desktop view</a>
+  <a href="bag.html?s=1" data-bag>Basket</a>
+  <button type="button" data-notes>Toggle notes</button>
+  <button type="button" data-reset>Reset</button>
+</div>
+
+<div class="mobile-stage">
+  <div class="phone">
+    <iframe id="screen" class="phone-frame" title="Mobile product page"></iframe>
+  </div>
+</div>
+
+<script src="offer.js"></script>
+<script>
+  // The mobile view is the same responsive page, shown at phone width.
+  const sp = new URLSearchParams(location.search).get('s');
+  const s = sp === '2' || sp === '3' ? sp : '1';
+  document.getElementById('screen').src = 'pdp.html?s=' + s;
+  document.querySelectorAll('.proto-bar [data-s]').forEach((a) => { a.href = 'pdp-mobile.html?s=' + a.dataset.s; if (a.dataset.s === s) a.setAttribute('aria-current', 'page'); });
+  document.querySelector('.proto-bar [data-view]').href = 'pdp.html?s=' + s;
+  document.querySelector('.proto-bar [data-bag]').href = 'bag.html?s=' + s;
+  initProtoBar();
+</script>
+</body>
+</html>
