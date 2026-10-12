@@ -160,6 +160,21 @@ h1, h2, h3 { margin: 0; font-weight: 400; color: var(--strong); }
 .io-name { font-size: 12px; color: var(--strong); }
 .io-worth { font-size: 11px; color: var(--muted); }
 .io-gift-wrap .link-btn { align-self: flex-start; font-size: 12px; min-height: 32px; }
+.io-progress { height: 4px; background: var(--line); }
+.io-progress span { display: block; height: 4px; background: var(--strong); }
+.io-step { font-size: 12px; letter-spacing: .04em; color: var(--strong); font-weight: 500; margin-top: 2px; }
+.io-step.locked { color: var(--muted); font-weight: 400; }
+.io-tile { width: 100%; border: 1px solid var(--line); background: #fff; padding: 6px; display: flex; flex-direction: column; gap: 3px; }
+.io-tile.chosen { border: 2px solid var(--strong); padding: 5px; }
+.io-tile .ph { height: 64px; border: 0; position: relative; font-size: 10px; }
+.io-this { position: absolute; top: 4px; left: 4px; background: var(--strong); color: #fff; font-size: 9px; padding: 2px 4px; letter-spacing: .06em; }
+.mini-stepper { display: flex; align-items: center; justify-content: space-between; border: 1px solid var(--line-strong); margin-top: 3px; }
+.mini-stepper button { width: 40px; height: 36px; border: 0; background: transparent; font-size: 16px; cursor: pointer; }
+.mini-stepper button:disabled { color: var(--line-strong); }
+.mini-stepper span { font-size: 13px; font-weight: 500; }
+.io-qty-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; font-size: 13px; }
+.io-qty-row .mini-stepper { width: 132px; margin-top: 0; }
+.io-gift:disabled { opacity: .45; cursor: not-allowed; }
 .io-terms { font-size: 12px; color: var(--muted); }
 
 .chosen-box { border: 1px solid var(--line); padding: 12px; display: flex; flex-direction: column; gap: 6px; font-size: 13px; }
