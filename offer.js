@@ -247,7 +247,7 @@ function initProtoBar() {
   });
   bar.querySelector('[data-reset]').addEventListener('click', () => {
     resetOffer();
-    try { localStorage.removeItem('choose-and-choose-onpage-v1'); } catch (e) { /* ignore */ }
+    try { localStorage.removeItem('choose-and-choose-onpage-v2'); } catch (e) { /* ignore */ }
     location.href = location.pathname + location.search;
   });
 }

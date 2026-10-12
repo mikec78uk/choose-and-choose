@@ -9,7 +9,7 @@ The prototype has two versions, depending on how big the offer is:
 - **Drawer version** (`index.html`, `mobile.html`): for larger offers, e.g. choose 2 from 10 products and gifts from 10. A one-line strip on the PDP opens the builder, so the product stays the focus.
 - **On-page version** (`inline.html`, `inline-mobile.html`): for simple offers only, shown directly on the PDP. It reuses the existing **"Claim as a free gift"** carousel from Choose and Get, so customers see a familiar pattern, plus one short offer line in the buy box that links down to it. There are two scenarios:
   - **Scenario 1 (`?s=1`): only this product qualifies, plus a few gifts.** The carousel shows the gifts ("When you purchase 2 of Protecting Hair Oil"). Gifts unlock once the quantity next to BUY is 2 ("Add 1 more" sets it). The customer claims one with the card's bag icon, and BUY adds the products and the gift together.
-  - **Scenario 2 (`?s=2`): several qualifying products, one gift.** The carousel shows the selected items ("When you purchase 2 of the selected items"), led by a gift card. Customers add items with the usual bag icon (or BUY for this product). There's nothing to choose: the gift is added automatically once 2 are in the bag.
+  - **Scenario 2 (`?s=2`): several qualifying products, one gift.** Follows the live site's "Unlock your gift" block in the buy box, but with the gift and the products in **one connected box**. The gift panel shows basket "slots" ([item] + [item] = gift) that fill as qualifying items go into the basket. Below it, "When you purchase any 2 of the following" lists the products: the one being viewed comes first ("YOU'RE VIEWING"), then items already in the basket ("✓ IN BASKET"). The gift unlocks and is added automatically at 2. The demo starts with one item already in the basket.
 
 Anything bigger (several products and several gifts) uses the drawer version.
 
@@ -35,7 +35,7 @@ The numbered annotations below are also hidden by default. Turn them on with `?n
 4. **One add-to-bag action:** adds the products and gifts together as one offer. Disabled until 2 products and at least 1 gift are chosen.
 5. **Product and gift details:** tap any product (or "View details" on a gift) to open its details inside the drawer or sheet: images, price, description, key benefits, how to use, ingredients, and a link to the full product page. Customers can add the product or choose the gift from there, and "Back" returns them to the same place in the list without losing their offer.
 6. **On-page, scenario 1:** "Claim as a free gift" carousel of gifts. Cards are locked until the customer is buying 2; the bag icon claims a gift ("✓ CLAIMED"), and BUY then reads "BUY 2 + FREE GIFT".
-7. **On-page, scenario 2:** the same carousel showing the selected items, led by the gift. Adding 2 items (bag icon or BUY) unlocks the gift, which is added automatically. A toast confirms each add.
+7. **On-page, scenario 2:** "Unlock your gift" in the buy box. Gift and products share one box, linked by the basket slots. The viewed product and items already in the basket are badged and outlined. Adding via the bag icons or ADD TO BASKET fills the slots; at 2 the panel turns green and the gift is added free.
 
 ## Open questions for feedback
 

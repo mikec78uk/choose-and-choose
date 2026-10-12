@@ -12,15 +12,16 @@ const ONPAGE = {
   gift: { id: 'gift', name: '[Gift name]', brand: '[BRAND]', worth: 'Worth £XX.XX' },
   products: OFFER.products.slice(0, 6),
 };
-const ONPAGE_KEY = 'choose-and-choose-onpage-v1';
+const ONPAGE_KEY = 'choose-and-choose-onpage-v2';
 
 function freshOnpage() {
-  return { s1: { qty: 1, gift: null, bagQty: 0, bagGift: null }, s2: { added: {} } };
+  // Scenario 2 starts with one qualifying item already in the basket, to show that state.
+  return { s1: { qty: 1, gift: null, bagQty: 0, bagGift: null }, s2: { added: { p4: 1 }, qty: 1 } };
 }
 function loadOnpage() {
   try {
     const s = JSON.parse(localStorage.getItem(ONPAGE_KEY));
-    if (s && s.s1 && s.s2) return s;
+    if (s && s.s1 && s.s2 && s.s2.qty) return s;
   } catch (e) { /* storage unavailable */ }
   return freshOnpage();
 }
@@ -40,8 +41,10 @@ const ICON = {
 
 // One card in the "Claim as a free gift" carousel (same anatomy as Choose and Get).
 function claimCard(c) {
-  return '<li class="card' + (c.selected ? ' selected' : '') + (c.hero ? ' gift-hero' : '') + '">' +
-    '<div class="card-media">' + (c.badge ? '<span class="card-badge">' + c.badge + '</span>' : '') + (c.hero ? 'GIFT IMAGE' : 'IMAGE') +
+  const badges = (c.badges || (c.badge ? [{ text: c.badge, kind: c.selected ? 'dark' : '' }] : []))
+    .map((b) => '<span class="card-badge ' + (b.kind || '') + '">' + b.text + '</span>').join('');
+  return '<li class="card' + (c.selected ? ' selected' : '') + (c.hero ? ' gift-hero' : '') + (c.cls ? ' ' + c.cls : '') + '">' +
+    '<div class="card-media">' + (badges ? '<div class="card-badges">' + badges + '</div>' : '') + (c.hero ? 'GIFT IMAGE' : 'IMAGE') +
     (c.hero ? '' : '<div class="card-actions">' +
       '<button type="button" class="round" aria-label="Add ' + c.name + ' to wishlist">' + ICON.heart + '</button>' +
       '<button type="button" class="round' + (c.selected ? ' on' : '') + '" ' + c.action + ' aria-label="' + c.actionLabel + '"' + (c.disabled ? ' disabled' : '') + '>' + (c.selected ? ICON.check : ICON.bag) + '</button></div>') +
@@ -57,7 +60,9 @@ function claimCard(c) {
 // opts: { overlayId, panelId }
 function initOnpage(opts) {
   const offerLine = document.getElementById('offer-line');
-  const claim = document.getElementById('claim');
+  // Scenario 1 uses the full-width carousel below the product; scenario 2 sits in the buy box.
+  const claim = document.getElementById(SCENARIO === 1 ? 'claim' : 'unlock');
+  document.getElementById(SCENARIO === 1 ? 'unlock' : 'claim').hidden = true;
   const buy = document.getElementById('buy');
   const qtyBox = document.getElementById('qty');
   const toast = document.getElementById('toast');
@@ -68,7 +73,7 @@ function initOnpage(opts) {
   let detailId = null;
 
   const showToast = (msg) => {
-    toast.innerHTML = '<span>' + msg + '</span><a href="bag.html?from=s' + SCENARIO + '">View bag</a>';
+    toast.innerHTML = '<span>' + msg + '</span><a href="bag.html?from=s' + SCENARIO + '">' + (SCENARIO === 2 ? 'View basket' : 'View bag') + '</a>';
     toast.hidden = false;
     clearTimeout(toastTimer);
     toastTimer = setTimeout(() => { toast.hidden = true; }, 4000);
@@ -99,27 +104,63 @@ function initOnpage(opts) {
   }
 
   function renderS2() {
+    const s = onpage.s2;
+    const req = ONPAGE.required;
     const total = s2Total();
-    const qualifies = total >= ONPAGE.required;
-    const left = ONPAGE.required - total;
-    offerLine.innerHTML = '<span class="tag">OFFER</span><span>Buy ' + ONPAGE.required + ' of the selected items, get ' + ONPAGE.gift.name + ' free</span><a href="#claim">' + (qualifies ? 'Gift unlocked ✓' : total + '/' + ONPAGE.required + ' added ↓') + '</a>';
-    buy.textContent = 'BUY';
+    const qualifies = total >= req;
+    const left = req - total;
+    const g = ONPAGE.gift;
+
+    offerLine.innerHTML = '<span class="tag">OFFER</span><span>Buy any ' + req + ' of the selected items, get ' + g.name + ' free</span><a href="#unlock">' + (qualifies ? 'Gift unlocked ✓' : total + '/' + req + ' in your basket ↓') + '</a>';
+    qtyBox.innerHTML = '<button type="button" data-q="-1" aria-label="Decrease quantity"' + (s.qty <= 1 ? ' disabled' : '') + '>−</button><span aria-live="polite">' + s.qty + '</span><button type="button" data-q="1" aria-label="Increase quantity">+</button>';
+    buy.textContent = 'ADD TO BASKET';
+
+    // Basket slots: each qualifying item in the basket fills one, and together they unlock the gift.
+    const inBasket = [];
+    ONPAGE.products.forEach((p) => { for (let i = 0; i < (s.added[p.id] || 0); i++) inBasket.push(p); });
+    let slots = '';
+    for (let i = 0; i < req; i++) {
+      const p = inBasket[i];
+      slots += (i ? '<span class="slot-op">+</span>' : '') +
+        (p ? '<span class="slot filled" title="' + p.name + '">' + (p.current ? 'THIS' : 'ITEM') + '<span class="slot-tick">✓</span></span>' : '<span class="slot">?</span>');
+    }
+    slots += '<span class="slot-op">=</span><span class="slot gift' + (qualifies ? ' filled' : '') + '">GIFT' + (qualifies ? '<span class="slot-tick">✓</span>' : '') + '</span>';
 
     const status = qualifies
-      ? '<span class="ok">✓ ' + ONPAGE.gift.name + ' will be added to your bag free.</span>'
-      : '<span>' + total + ' of ' + ONPAGE.required + ' added · add ' + left + ' more to get your gift.</span>';
+      ? '✓ Unlocked. Your gift is added to your basket free.'
+      : total + ' of ' + req + ' in your basket · add ' + left + ' more to unlock';
 
-    claim.innerHTML = claimHead('Claim ' + ONPAGE.gift.name + ' free', 'When you purchase ' + ONPAGE.required + ' of the selected items', status, 7) +
-      '<ul class="cards">' +
-      claimCard({ id: 'gift', hero: true, name: ONPAGE.gift.name, brand: ONPAGE.gift.brand, price: '<span class="free">FREE</span> <span class="was">' + ONPAGE.gift.worth + '</span>', badge: qualifies ? '✓ UNLOCKED' : 'FREE GIFT', note: 'Added automatically' }) +
-      ONPAGE.products.map((p) => {
-        const n = onpage.s2.added[p.id] || 0;
-        return claimCard({
-          id: p.id, name: p.name, brand: p.sub.split(' · ')[0].toUpperCase(), price: p.price,
-          badge: p.current ? 'THIS PRODUCT' : null, note: n ? 'In your bag ×' + n : null,
-          action: 'data-add="' + p.id + '"', actionLabel: 'Add ' + p.name + ' to bag',
-        });
-      }).join('') + '</ul>';
+    // This product first, then items already in the basket, then the rest.
+    const rank = (p) => (p.current ? 0 : s.added[p.id] ? 1 : 2);
+    const ordered = ONPAGE.products.slice().sort((x, y) => rank(x) - rank(y));
+
+    claim.innerHTML =
+      '<h2 class="unlock-title" id="unlock-title"><span class="note" aria-hidden="true">7</span>Unlock your gift</h2>' +
+      '<div class="unlock-box' + (qualifies ? ' done' : '') + '">' +
+        '<div class="unlock-gift">' +
+          '<div class="ph unlock-gift-img">GIFT IMAGE</div>' +
+          '<div class="unlock-gift-copy">' +
+            '<strong>FREE ' + g.name + '</strong>' +
+            '<span>when you buy any ' + req + ' of the products below</span>' +
+            '<div class="slots" role="img" aria-label="' + total + ' of ' + req + ' qualifying items in your basket">' + slots + '</div>' +
+            '<span class="unlock-status' + (qualifies ? ' ok' : '') + '" aria-live="polite">' + status + '</span>' +
+            '<button type="button" class="link-btn" data-detail="gift">Gift details</button>' +
+          '</div>' +
+        '</div>' +
+        '<div class="unlock-list-head"><span>When you purchase any ' + req + ' of the following</span>' +
+          '<div class="arrows"><button type="button" class="arrow" data-scroll="-1" aria-label="Previous">‹</button><button type="button" class="arrow" data-scroll="1" aria-label="Next">›</button></div></div>' +
+        '<ul class="cards compact">' + ordered.map((p) => {
+          const n = s.added[p.id] || 0;
+          const badges = [];
+          if (p.current) badges.push({ text: 'YOU\u2019RE VIEWING', kind: 'dark' });
+          if (n) badges.push({ text: '✓ IN BASKET' + (n > 1 ? ' ×' + n : ''), kind: 'ok' });
+          return claimCard({
+            id: p.id, name: p.name, brand: p.sub.split(' · ')[0].toUpperCase(), price: p.price,
+            cls: (p.current ? 'viewing' : '') + (n ? ' in-basket' : ''), badges,
+            action: 'data-add="' + p.id + '"', actionLabel: (n ? 'Add another ' : 'Add ') + p.name + ' to basket',
+          });
+        }).join('') + '</ul>' +
+      '</div>';
   }
 
   function claimHead(title, sub, status, n) {
@@ -179,10 +220,11 @@ function initOnpage(opts) {
       onpage.s1.gift = onpage.s1.gift === t.dataset.claim ? null : t.dataset.claim;
     } else if (t.dataset.add) {
       const p = ONPAGE.products.find((x) => x.id === t.dataset.add);
+      const n = Number(t.dataset.n) || 1;
       const before = s2Total();
-      onpage.s2.added[p.id] = (onpage.s2.added[p.id] || 0) + 1;
+      onpage.s2.added[p.id] = (onpage.s2.added[p.id] || 0) + n;
       const unlocked = before < ONPAGE.required && s2Total() >= ONPAGE.required;
-      showToast('Added to bag: ' + p.name + (unlocked ? ' · Free gift unlocked ✓' : ''));
+      showToast('Added to basket: ' + (n > 1 ? n + ' × ' : '') + p.name + (unlocked ? ' · Free gift unlocked ✓' : ''));
     } else if (t.hasAttribute('data-fill')) {
       onpage.s1.qty = ONPAGE.required;
     } else return false;
@@ -216,12 +258,13 @@ function initOnpage(opts) {
   qtyBox.addEventListener('click', (e) => {
     const t = e.target.closest('button');
     if (!t || t.disabled) return;
-    onpage.s1.qty = Math.max(1, onpage.s1.qty + Number(t.dataset.q));
-    if (onpage.s1.qty < ONPAGE.required) onpage.s1.gift = null;
+    const st = SCENARIO === 1 ? onpage.s1 : onpage.s2;
+    st.qty = Math.max(1, st.qty + Number(t.dataset.q));
+    if (SCENARIO === 1 && st.qty < ONPAGE.required) st.gift = null;
     saveOnpage();
     render();
   });
-  qtyBox.hidden = SCENARIO !== 1;
+  qtyBox.hidden = false;
 
   buy.addEventListener('click', () => {
     if (SCENARIO === 1) {
@@ -232,7 +275,7 @@ function initOnpage(opts) {
       showToast('Added to bag: ' + s.qty + ' × ' + ONPAGE.product.name + (s.bagGift ? ' + free gift' : ''));
       render();
     } else {
-      act({ dataset: { add: ONPAGE.product.id }, hasAttribute: () => false });
+      act({ dataset: { add: ONPAGE.product.id, n: onpage.s2.qty }, hasAttribute: () => false });
     }
   });
 

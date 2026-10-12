@@ -62,8 +62,9 @@
       if (total && !qualifies) notice = '<div class="notice warn"><strong>Add ' + plural(req - total, 'more item') + ' from the offer to get ' + ONPAGE.gift.name + ' free.</strong><a href="' + pdp + '#claim">See the selected items</a></div>';
       else if (qualifies) notice = '<div class="notice ok">' + ONPAGE.gift.name + ' added free.</div>';
     }
-    let html = '<h1>Your bag (' + count + ')</h1>';
-    if (!count) { bag.innerHTML = html + '<p class="hint">Your bag is empty. <a href="' + pdp + '">Back to the product</a></p>'; return; }
+    const noun = from === 's2' ? 'basket' : 'bag';
+    let html = '<h1>Your ' + noun + ' (' + count + ')</h1>';
+    if (!count) { bag.innerHTML = html + '<p class="hint">Your ' + noun + ' is empty. <a href="' + pdp + '">Back to the product</a></p>'; return; }
     html += notice + '<div class="offer-group"><div class="group-head"><span>' + (qualifies ? 'CHOOSE &amp; CHOOSE OFFER' : 'YOUR ITEMS') + '</span><a href="' + pdp + '#claim">Edit</a></div>' + lines + '</div>' +
       '<div class="totals"><div><span>Subtotal</span><span>[SUBTOTAL]</span></div>' + (qualifies ? '<div class="free"><span>Gift savings</span><span>\u2212£XX.XX</span></div>' : '') + '</div>' +
       '<button type="button" class="btn-primary">CHECKOUT</button>';

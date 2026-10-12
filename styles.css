@@ -231,8 +231,39 @@ body:not(.show-notes) .note { display: none; }
 .card-media { position: relative; height: 260px; background: var(--subtle); border: 2px solid transparent; display: flex; align-items: center; justify-content: center; font-size: 11px; letter-spacing: .1em; color: var(--placeholder); }
 .card.selected .card-media { border-color: var(--strong); }
 .card.gift-hero .card-media { background: var(--offer-soft); border: 1px dashed var(--line-strong); }
-.card-badge { position: absolute; top: 12px; left: 12px; background: var(--offer); color: #000; font-size: 11px; font-weight: 500; letter-spacing: .04em; padding: 3px 6px; }
-.card.selected .card-badge { background: var(--strong); color: #fff; }
+.card-badges { position: absolute; top: 10px; left: 10px; display: flex; flex-direction: column; align-items: flex-start; gap: 4px; }
+.card-badge { background: var(--offer); color: #000; font-size: 11px; font-weight: 500; letter-spacing: .04em; padding: 3px 6px; }
+.card-badge.dark { background: var(--strong); color: #fff; }
+.card-badge.ok { background: var(--success); color: #fff; }
+.card.viewing .card-media { border-color: var(--strong); }
+.card.in-basket .card-media { border-color: var(--success); }
+.card.viewing.in-basket .card-media { border-color: var(--strong); }
+
+/* Scenario 2: "Unlock your gift" in the buy box; gift and products in one box */
+.unlock { border-top: 1px solid var(--line); padding-top: 24px; display: flex; flex-direction: column; gap: 14px; }
+.unlock[hidden] { display: none; }
+.unlock-title { font-size: 22px; font-weight: 300; display: flex; align-items: center; gap: 8px; }
+.unlock-box { border: 1px solid var(--line-strong); }
+.unlock-gift { display: flex; gap: 16px; padding: 16px; background: var(--offer-soft); border-bottom: 1px solid var(--line); }
+.unlock-box.done .unlock-gift { background: var(--success-soft); }
+.unlock-gift-img { width: 96px; height: 96px; flex: none; border: 0; background: #fff; font-size: 10px; }
+.unlock-gift-copy { display: flex; flex-direction: column; gap: 6px; font-size: 14px; min-width: 0; }
+.unlock-gift-copy strong { font-size: 15px; font-weight: 500; color: var(--strong); letter-spacing: .02em; }
+.unlock-gift-copy .link-btn { align-self: flex-start; font-size: 13px; }
+.slots { display: flex; align-items: center; gap: 6px; margin-top: 4px; flex-wrap: wrap; }
+.slot { position: relative; width: 44px; height: 44px; border: 1px dashed var(--line-strong); background: #fff; display: flex; align-items: center; justify-content: center; font-size: 9px; letter-spacing: .05em; color: var(--muted); }
+.slot.filled { border: 1px solid var(--strong); color: var(--placeholder); }
+.slot.gift { background: var(--offer); border-style: solid; border-color: var(--offer); color: #000; }
+.slot.gift.filled { border-color: var(--success); }
+.slot-tick { position: absolute; top: -7px; right: -7px; width: 18px; height: 18px; border-radius: 50%; background: var(--success); color: #fff; font-size: 11px; display: flex; align-items: center; justify-content: center; }
+.slot-op { font-size: 16px; color: var(--muted); }
+.unlock-status { font-size: 13px; }
+.unlock-status.ok { color: var(--success); font-weight: 500; }
+.unlock-list-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 16px 16px 12px; font-size: 16px; color: var(--strong); }
+.unlock-list-head .arrow { width: 40px; height: 40px; font-size: 20px; }
+.unlock .cards { padding: 0 16px 16px; scroll-padding-inline: 16px; }
+.cards.compact .card { flex-basis: 200px; }
+.cards.compact .card-media { height: 200px; }
 .card-actions { position: absolute; right: 12px; bottom: 12px; display: flex; flex-direction: column; gap: 10px; }
 .round { width: 44px; height: 44px; border-radius: 50%; border: 0; background: #fff; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 1px 3px rgba(0,0,0,.12); }
 .round.on { background: var(--strong); color: #fff; }
@@ -257,7 +288,8 @@ body:not(.show-notes) .note { display: none; }
   .claim-head h2 { font-size: 22px; }
   .claim-sub { font-size: 14px; }
   .arrows { display: none; }
-  .card { flex-basis: 72%; }
+  .card, .cards.compact .card { flex-basis: 72%; }
+  .unlock-gift-img { width: 72px; height: 72px; }
   .card-media { height: 200px; }
   .wrap, .site-header .inner { padding-left: 16px; padding-right: 16px; }
   .gallery { flex-basis: 100%; }
