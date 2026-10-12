@@ -20,6 +20,7 @@ Use the dark bar at the top to switch views, show or hide the numbered annotatio
 2. **Step 1, choose 2 products:** the current product is pre-added (1 of 2). Customers can add the same product twice. "+" is disabled once 2 are chosen.
 3. **Step 2, choose your gift:** stays locked until step 1 is done. Once the gift limit is reached (2 in this demo), the other gifts are disabled.
 4. **One add-to-bag action:** adds the products and gifts together as one offer. Disabled until 2 products and at least 1 gift are chosen.
+5. **Product and gift details:** tap any product (or "View details" on a gift) to open its details inside the drawer or sheet: images, price, description, key benefits, how to use, ingredients, and a link to the full product page. Customers can add the product or choose the gift from there, and "Back" returns them to the same place in the list without losing their offer.
 
 ## Open questions for feedback
 

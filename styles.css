@@ -114,6 +114,35 @@ h1, h2, h3 { margin: 0; font-weight: 400; color: var(--strong); }
 .stepper button:disabled { color: var(--line-strong); }
 .stepper span { width: 20px; text-align: center; font-size: 14px; font-weight: 500; }
 
+.row-link { flex: 1 1 auto; min-width: 0; display: flex; align-items: center; gap: 12px; border: 0; background: transparent; padding: 0; text-align: left; cursor: pointer; }
+.row-link .more { font-size: 12px; text-decoration: underline; color: var(--ink); margin-top: 2px; }
+.row-link:hover .name { text-decoration: underline; }
+.gift-card { display: flex; flex-direction: column; gap: 2px; }
+.gift-card .link-btn { align-self: flex-start; font-size: 12px; min-height: 32px; }
+
+/* Product / gift details inside the drawer or sheet */
+.back-btn { align-self: flex-start; display: inline-flex; align-items: center; gap: 6px; border: 0; background: transparent; font-size: 13px; min-height: 40px; padding: 0; cursor: pointer; }
+.detail { position: relative; display: flex; flex-direction: column; gap: 10px; }
+.detail > .note { position: absolute; top: 8px; right: 8px; z-index: 1; }
+.detail-image { height: 260px; border: 0; }
+.phone .detail-image { height: 220px; }
+.detail-thumbs { display: flex; gap: 8px; }
+.detail-thumbs .ph { width: 48px; height: 48px; }
+.detail .brand { margin-top: 6px; }
+.detail-name { font-size: 22px; }
+.detail .sub { font-size: 13px; color: var(--muted); }
+.detail-price { font-size: 20px; color: var(--strong); }
+.detail-copy { margin: 0; font-size: 14px; line-height: 1.5; }
+.benefits { margin: 0; padding-left: 18px; font-size: 14px; line-height: 1.6; }
+.detail details { border-top: 1px solid var(--line); }
+.detail details:last-of-type { border-bottom: 1px solid var(--line); }
+.detail summary { padding: 14px 0; font-size: 13px; letter-spacing: .08em; cursor: pointer; }
+.detail details .detail-copy { padding-bottom: 14px; }
+.detail-link { font-size: 13px; }
+.detail-action { display: flex; align-items: center; justify-content: space-between; gap: 12px; border: 1px solid var(--line); padding: 10px 12px; font-size: 14px; }
+.btn-outline { min-height: 52px; background: #fff; color: var(--strong); border: 1px solid var(--strong); font-size: 14px; letter-spacing: .1em; cursor: pointer; }
+.btn-outline:disabled { border-color: var(--line); color: var(--muted); }
+
 .chosen-box { border: 1px solid var(--line); padding: 12px; display: flex; flex-direction: column; gap: 6px; font-size: 13px; }
 .chosen-box .row-head span { font-weight: 500; color: var(--strong); }
 .chosen-box .item { color: var(--muted); }
