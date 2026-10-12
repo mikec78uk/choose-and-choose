@@ -233,7 +233,7 @@ function initProtoBar() {
   try { if (param !== null) sessionStorage.setItem(STORE_KEY + '-proto', param); } catch (e) { /* ignore */ }
   let show = param === '1';
   try { show = sessionStorage.getItem(STORE_KEY + '-proto') === '1'; } catch (e) { /* ignore */ }
-  document.body.classList.toggle('show-proto', show);
+  document.body.classList.toggle('show-proto', show && window.top === window);
   // Annotations are off by default; turn on with the toolbar button or ?notes=1.
   const notesKey = STORE_KEY + '-show-notes';
   const notesParam = new URLSearchParams(location.search).get('notes');
@@ -247,7 +247,7 @@ function initProtoBar() {
   });
   bar.querySelector('[data-reset]').addEventListener('click', () => {
     resetOffer();
-    try { localStorage.removeItem('choose-and-choose-inline-v2'); } catch (e) { /* ignore */ }
+    try { localStorage.removeItem('choose-and-choose-onpage-v1'); } catch (e) { /* ignore */ }
     location.href = location.pathname + location.search;
   });
 }

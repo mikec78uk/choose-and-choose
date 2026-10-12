@@ -13,8 +13,10 @@
   <strong>Choose and Choose · wireframe</strong>
   <a href="index.html">Drawer · Desktop</a>
   <a href="mobile.html">Drawer · Mobile</a>
-  <a href="inline.html">On-page offer · Desktop</a>
-  <a href="inline-mobile.html">On-page offer · Mobile</a>
+  <a href="inline.html?s=1">On-page 1 · Desktop</a>
+  <a href="inline.html?s=2">On-page 2 · Desktop</a>
+  <a href="inline-mobile.html?s=1">On-page 1 · Mobile</a>
+  <a href="inline-mobile.html?s=2">On-page 2 · Mobile</a>
   <a href="bag.html" aria-current="page">Bag</a>
   <button type="button" data-notes>Toggle notes</button>
   <button type="button" data-reset>Reset</button>
@@ -27,42 +29,49 @@
 <script>
   initProtoBar();
   const from = new URLSearchParams(location.search).get('from');
-  const pdp = { mobile: 'mobile.html', inline: 'inline.html', 'inline-mobile': 'inline-mobile.html' }[from] || 'index.html';
+  const pdp = { mobile: 'mobile.html', s1: 'inline.html?s=1', s2: 'inline.html?s=2' }[from] || 'index.html';
   const bag = document.getElementById('bag');
 
-  // On-page version: this product plus the gift chosen on the PDP.
-  function renderInlineBag() {
-    const n = new URLSearchParams(location.search).get('products');
-    const back = pdp + (n ? '?products=' + n : '');
-    const chosen = INLINE.products.filter((p) => inlineState.qty[p.id] > 0);
-    const gifts = INLINE.gifts.filter((g) => inlineState.picked.includes(g.id));
-    const total = inlineTotal();
-    const complete = inlineComplete();
-    let html = '<h1>Your bag (' + (total + gifts.length) + ')</h1>';
-    if (!complete) {
-      html += '<div class="notice warn"><strong>Add ' + plural(INLINE.required - total, 'more product') + ' from the offer to get a free gift.</strong>' +
-        '<a href="' + back + '">See the offer</a></div>';
-    } else if (!gifts.length) {
-      html += '<div class="notice warn"><strong>You qualify for a free gift but haven\u2019t chosen one yet.</strong>' +
-        '<a href="' + back + '">Choose your free gift</a></div>';
+  // On-page version: scenario 1 (this product + a claimed gift) or 2 (selected items + one automatic gift).
+  const lineHtml = (name, sub, price, isGift) => '<div class="bag-line"><div class="ph">' + (isGift ? 'GIFT' : '') + '</div><div class="info"><span class="name">' + name + '</span>' +
+    '<span class="sub">' + sub + '</span></div><span' + (isGift ? ' class="free"' : '') + '>' + price + '</span></div>';
+
+  function renderOnpageBag() {
+    const req = ONPAGE.required;
+    let lines = '', count = 0, notice = '', qualifies = false;
+    if (from === 's1') {
+      const s = onpage.s1;
+      const gift = ONPAGE.gifts.find((g) => g.id === s.bagGift);
+      qualifies = s.bagQty >= req;
+      count = s.bagQty + (gift && qualifies ? 1 : 0);
+      if (s.bagQty) lines += lineHtml(ONPAGE.product.name, ONPAGE.product.sub + ' · Qty ' + s.bagQty, ONPAGE.product.price);
+      if (gift && qualifies) lines += lineHtml(gift.name, 'Free gift · ' + gift.worth, 'FREE', true);
+      if (!s.bagQty) notice = '';
+      else if (!qualifies) notice = '<div class="notice warn"><strong>Add ' + plural(req - s.bagQty, 'more') + ' ' + ONPAGE.product.name + ' to claim a free gift.</strong><a href="' + pdp + '">See the gifts</a></div>';
+      else if (!gift) notice = '<div class="notice warn"><strong>You qualify for a free gift but haven\u2019t claimed one.</strong><a href="' + pdp + '#claim">Choose your gift</a></div>';
+      else notice = '<div class="notice ok">Free gift claimed with your ' + ONPAGE.product.name + '.</div>';
     } else {
-      html += '<div class="notice ok">Choose &amp; Choose offer added: your gift is free.</div>';
+      const total = s2Total();
+      qualifies = total >= req;
+      count = total + (qualifies ? 1 : 0);
+      ONPAGE.products.forEach((p) => {
+        const n = onpage.s2.added[p.id];
+        if (n) lines += lineHtml(p.name, p.sub + ' · Qty ' + n, p.price);
+      });
+      if (qualifies) lines += lineHtml(ONPAGE.gift.name, 'Free gift · added automatically', 'FREE', true);
+      if (total && !qualifies) notice = '<div class="notice warn"><strong>Add ' + plural(req - total, 'more item') + ' from the offer to get ' + ONPAGE.gift.name + ' free.</strong><a href="' + pdp + '#claim">See the selected items</a></div>';
+      else if (qualifies) notice = '<div class="notice ok">' + ONPAGE.gift.name + ' added free.</div>';
     }
-    html += '<div class="offer-group"><div class="group-head"><span>' + (complete ? 'CHOOSE &amp; CHOOSE OFFER' : 'YOUR ITEMS') + '</span>' +
-      '<a href="' + back + '">Edit offer</a></div>' +
-      chosen.map((p) => '<div class="bag-line"><div class="ph"></div><div class="info"><span class="name">' + p.name + '</span>' +
-        '<span class="sub">' + p.sub + ' · Qty ' + inlineState.qty[p.id] + '</span></div><span>' + p.price + '</span></div>').join('') +
-      gifts.map((g) => '<div class="bag-line"><div class="ph">GIFT</div><div class="info"><span class="name">' + g.name + '</span>' +
-        '<span class="sub">Free gift · ' + g.worth + '</span></div><span class="free">FREE</span></div>').join('') +
-      '</div>';
-    html += '<div class="totals"><div><span>Subtotal</span><span>[SUBTOTAL]</span></div>' +
-      (gifts.length ? '<div class="free"><span>Gift savings</span><span>−£XX.XX</span></div>' : '') + '</div>' +
+    let html = '<h1>Your bag (' + count + ')</h1>';
+    if (!count) { bag.innerHTML = html + '<p class="hint">Your bag is empty. <a href="' + pdp + '">Back to the product</a></p>'; return; }
+    html += notice + '<div class="offer-group"><div class="group-head"><span>' + (qualifies ? 'CHOOSE &amp; CHOOSE OFFER' : 'YOUR ITEMS') + '</span><a href="' + pdp + '#claim">Edit</a></div>' + lines + '</div>' +
+      '<div class="totals"><div><span>Subtotal</span><span>[SUBTOTAL]</span></div>' + (qualifies ? '<div class="free"><span>Gift savings</span><span>\u2212£XX.XX</span></div>' : '') + '</div>' +
       '<button type="button" class="btn-primary">CHECKOUT</button>';
     bag.innerHTML = html;
   }
 
   function renderBag() {
-    if (from === 'inline' || from === 'inline-mobile') { renderInlineBag(); return; }
+    if (from === 's1' || from === 's2') { renderOnpageBag(); return; }
     const chosen = OFFER.products.filter((p) => state.qty[p.id] > 0);
     const gifts = OFFER.gifts.filter((g) => state.picked.includes(g.id));
     const complete = isComplete();
