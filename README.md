@@ -14,6 +14,8 @@ A clickable, low-fidelity wireframe showing how a customer claims the **Choose a
 
 Your choices carry across all three views. A prototype toolbar (switch views, show or hide the numbered annotations, reset the demo) is hidden by default. Add `?proto=1` to the URL to show it, or `?proto=0` to hide it again.
 
+The numbered annotations below are also hidden by default. Turn them on with `?notes=1` (or the toolbar's "Toggle notes"), and off with `?notes=0`.
+
 ## Annotations
 
 1. **Offer strip:** a secondary, single-line entry point under BUY. The product and BUY stay the focus of the PDP. The strip shows live progress once the customer has started.

@@ -204,7 +204,7 @@ h1, h2, h3 { margin: 0; font-weight: 400; color: var(--strong); }
 .totals div { display: flex; justify-content: space-between; }
 
 .note { display: inline-flex; width: 22px; height: 22px; border-radius: 50%; background: var(--note); color: #fff; font-size: 11px; font-weight: 600; align-items: center; justify-content: center; flex: none; }
-.notes-off .note { display: none; }
+body:not(.show-notes) .note { display: none; }
 
 @media (max-width: 640px) {
   .wrap, .site-header .inner { padding-left: 16px; padding-right: 16px; }

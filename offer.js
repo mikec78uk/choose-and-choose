@@ -210,7 +210,7 @@ function initPdp({ stripId, overlayId, panelId, statusId, bagHref, sheet }) {
   const overlay = document.getElementById(overlayId);
   const panel = document.getElementById(panelId);
   const status = document.getElementById(statusId);
-  const notes = true; // annotation markers; hidden via CSS when toggled off
+  const notes = true; // annotation markers; hidden via CSS unless turned on
   const updateStatus = () => { status.textContent = stripStatus(); };
 
   const open = () => { overlay.hidden = false; builder.render(); panel.querySelector('[data-close]').focus(); };
@@ -234,10 +234,16 @@ function initProtoBar() {
   let show = param === '1';
   try { show = sessionStorage.getItem(STORE_KEY + '-proto') === '1'; } catch (e) { /* ignore */ }
   document.body.classList.toggle('show-proto', show);
-  try { if (localStorage.getItem(STORE_KEY + '-notes') === 'off') document.body.classList.add('notes-off'); } catch (e) { /* ignore */ }
+  // Annotations are off by default; turn on with the toolbar button or ?notes=1.
+  const notesKey = STORE_KEY + '-show-notes';
+  const notesParam = new URLSearchParams(location.search).get('notes');
+  try { if (notesParam !== null) localStorage.setItem(notesKey, notesParam === '1' ? 'on' : 'off'); } catch (e) { /* ignore */ }
+  let notesOn = notesParam === '1';
+  try { notesOn = localStorage.getItem(notesKey) === 'on'; } catch (e) { /* ignore */ }
+  document.body.classList.toggle('show-notes', notesOn);
   bar.querySelector('[data-notes]').addEventListener('click', () => {
-    const off = document.body.classList.toggle('notes-off');
-    try { localStorage.setItem(STORE_KEY + '-notes', off ? 'off' : 'on'); } catch (e) { /* ignore */ }
+    const on = document.body.classList.toggle('show-notes');
+    try { localStorage.setItem(notesKey, on ? 'on' : 'off'); } catch (e) { /* ignore */ }
   });
   bar.querySelector('[data-reset]').addEventListener('click', () => { resetOffer(); location.href = location.pathname; });
 }
