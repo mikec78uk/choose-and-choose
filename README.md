@@ -21,7 +21,7 @@ A suggested rule for which to use: on-page when there's 1 qualifying product and
 | `inline-mobile.html` | The same on mobile; gift details open as a bottom sheet. |
 | `bag.html` | The offer grouped in the bag, with the free gift(s) at £0.00. Remove a product to see the "gift on hold" state. For the on-page version, it shows the product plus the gift, or a reminder if no gift was chosen. |
 
-Your choices carry across all three views. A prototype toolbar (switch views, show or hide the numbered annotations, reset the demo) is hidden by default. Add `?proto=1` to the URL to show it, or `?proto=0` to hide it again.
+Your choices carry through to the bag. A prototype toolbar (switch views, show or hide the numbered annotations, reset the demo) is hidden by default. Add `?proto=1` to the URL to show it, or `?proto=0` to hide it again.
 
 The numbered annotations below are also hidden by default. Turn them on with `?notes=1` (or the toolbar's "Toggle notes"), and off with `?notes=0`.
 
