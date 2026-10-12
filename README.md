@@ -12,7 +12,7 @@ A clickable, low-fidelity wireframe showing how a customer claims the **Choose a
 | `mobile.html` | Mobile PDP. The same strip opens the builder as a bottom sheet. |
 | `bag.html` | The offer grouped in the bag, with the free gift(s) at £0.00. Remove a product to see the "gift on hold" state. |
 
-Use the dark bar at the top to switch views, show or hide the numbered annotations, or reset the demo. Your choices carry across all three views.
+Your choices carry across all three views. A prototype toolbar (switch views, show or hide the numbered annotations, reset the demo) is hidden by default. Add `?proto=1` to the URL to show it, or `?proto=0` to hide it again.
 
 ## Annotations
 

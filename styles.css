@@ -25,7 +25,8 @@ button:disabled { cursor: not-allowed; }
 h1, h2, h3 { margin: 0; font-weight: 400; color: var(--strong); }
 
 /* Prototype chrome (not part of the design) */
-.proto-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px; padding: 8px 16px; background: #1e1e1e; color: #ffffff; font-size: 13px; }
+.proto-bar { display: none; }
+.show-proto .proto-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px; padding: 8px 16px; background: #1e1e1e; color: #ffffff; font-size: 13px; }
 .proto-bar strong { font-weight: 500; margin-right: auto; }
 .proto-bar a, .proto-bar button { color: #ffffff; background: transparent; border: 1px solid #6b6a66; padding: 6px 10px; text-decoration: none; font-size: 13px; cursor: pointer; }
 .proto-bar a[aria-current="page"] { background: #ffffff; color: #000000; border-color: #ffffff; }

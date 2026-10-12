@@ -225,9 +225,15 @@ function initPdp({ stripId, overlayId, panelId, statusId, bagHref, sheet }) {
 }
 
 // Prototype toolbar: view switcher, annotation toggle and reset.
+// Hidden by default; add ?proto=1 to the URL to show it (?proto=0 hides it again).
 function initProtoBar() {
   const bar = document.querySelector('.proto-bar');
   if (!bar) return;
+  const param = new URLSearchParams(location.search).get('proto');
+  try { if (param !== null) sessionStorage.setItem(STORE_KEY + '-proto', param); } catch (e) { /* ignore */ }
+  let show = param === '1';
+  try { show = sessionStorage.getItem(STORE_KEY + '-proto') === '1'; } catch (e) { /* ignore */ }
+  document.body.classList.toggle('show-proto', show);
   try { if (localStorage.getItem(STORE_KEY + '-notes') === 'off') document.body.classList.add('notes-off'); } catch (e) { /* ignore */ }
   bar.querySelector('[data-notes]').addEventListener('click', () => {
     const off = document.body.classList.toggle('notes-off');
