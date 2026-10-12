@@ -144,6 +144,24 @@ h1, h2, h3 { margin: 0; font-weight: 400; color: var(--strong); }
 .btn-outline { min-height: 52px; background: #fff; color: var(--strong); border: 1px solid var(--strong); font-size: 14px; letter-spacing: .1em; cursor: pointer; }
 .btn-outline:disabled { border-color: var(--line); color: var(--muted); }
 
+/* On-page gift picker: compact, sits between price and BUY */
+.inline-offer { border: 1px solid var(--line); padding: 12px 14px; display: flex; flex-direction: column; gap: 10px; }
+.io-head { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.io-title { font-size: 14px; color: var(--strong); }
+.io-count { margin-left: auto; font-size: 12px; color: var(--muted); }
+.io-gifts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.io-gift-wrap { display: flex; flex-direction: column; gap: 0; min-width: 0; }
+.io-gift { width: 100%; border: 1px solid var(--line); background: #fff; padding: 6px; display: flex; flex-direction: column; gap: 3px; text-align: left; cursor: pointer; }
+.io-gift:hover { border-color: var(--line-strong); }
+.io-gift[aria-pressed="true"] { border: 2px solid var(--strong); background: var(--offer-soft); padding: 5px; }
+.io-gift .ph { height: 64px; border: 0; position: relative; font-size: 10px; }
+.io-gift .check { position: absolute; top: 4px; right: 4px; width: 18px; height: 18px; border: 1.5px solid var(--strong); background: #fff; color: #fff; font-size: 11px; display: flex; align-items: center; justify-content: center; }
+.io-gift[aria-pressed="true"] .check { background: var(--strong); }
+.io-name { font-size: 12px; color: var(--strong); }
+.io-worth { font-size: 11px; color: var(--muted); }
+.io-gift-wrap .link-btn { align-self: flex-start; font-size: 12px; min-height: 32px; }
+.io-terms { font-size: 12px; color: var(--muted); }
+
 .chosen-box { border: 1px solid var(--line); padding: 12px; display: flex; flex-direction: column; gap: 6px; font-size: 13px; }
 .chosen-box .row-head span { font-weight: 500; color: var(--strong); }
 .chosen-box .item { color: var(--muted); }

@@ -245,5 +245,9 @@ function initProtoBar() {
     const on = document.body.classList.toggle('show-notes');
     try { localStorage.setItem(notesKey, on ? 'on' : 'off'); } catch (e) { /* ignore */ }
   });
-  bar.querySelector('[data-reset]').addEventListener('click', () => { resetOffer(); location.href = location.pathname; });
+  bar.querySelector('[data-reset]').addEventListener('click', () => {
+    resetOffer();
+    try { localStorage.removeItem('choose-and-choose-inline-v1'); } catch (e) { /* ignore */ }
+    location.href = location.pathname + location.search;
+  });
 }

@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Choose and Choose · On-page gift · Mobile</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="proto-bar">
+  <strong>Choose and Choose · wireframe</strong>
+  <a href="index.html">Drawer · Desktop</a>
+  <a href="mobile.html">Drawer · Mobile</a>
+  <a href="inline.html">On-page gift · Desktop</a>
+  <a href="inline-mobile.html" aria-current="page">On-page gift · Mobile</a>
+  <a href="bag.html">Bag</a>
+  <button type="button" data-notes>Toggle notes</button>
+  <button type="button" data-reset>Reset</button>
+</div>
+
+<div class="mobile-stage">
+  <div class="phone">
+    <div class="phone-scroll">
+      <div class="promo-strip" style="font-size:12px;padding:8px 16px">PROMO STRIP</div>
+      <header class="site-header">
+        <div class="inner">
+          <button class="icon-btn" aria-label="Menu"><svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
+          <div class="logo">LOGO</div>
+          <a class="icon-btn" href="bag.html?from=inline-mobile" aria-label="Bag"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M5 8h14l-1 13H6L5 8z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg></a>
+        </div>
+      </header>
+
+      <div class="ph hero-image">PRODUCT IMAGE<div class="dots"><span></span><span></span><span></span></div></div>
+
+      <div class="buybox">
+        <div class="brand">ELEO</div>
+        <h1>Protecting Hair Oil</h1>
+        <div class="meta">★★★★★ (ratings) · 38601 · 50 ml</div>
+        <div class="price">£11.99</div>
+        <div class="inline-offer" id="inline-offer"></div>
+        <button type="button" class="btn-primary" id="buy">BUY</button>
+
+        <div class="meta">Our lowest price, the last 30 days before current price, was £11.99</div>
+        <div class="delivery">
+          <span>Free delivery for VIPs for orders above £45</span>
+          <span>Delivery time: UK 2-3 business days</span>
+        </div>
+        <div class="vip">
+          <strong>Become a VIP customer, enjoy the benefits!</strong>
+          <span>15% off your first order · Free shipping above £45</span>
+        </div>
+        <div class="accordion">
+          <div><span>DESCRIPTION</span><span>+</span></div>
+          <div><span>HOW TO USE</span><span>+</span></div>
+          <div><span>INGREDIENTS</span><span>+</span></div>
+          <div><span>OFFER TERMS</span><span>+</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="overlay" id="detail-overlay" hidden>
+      <button type="button" class="backdrop" aria-label="Close details" tabindex="-1"></button>
+      <div class="panel" id="detail-panel" role="dialog" aria-modal="true" aria-labelledby="io-detail-title"></div>
+    </div>
+  </div>
+</div>
+
+<script src="offer.js"></script>
+<script src="inline.js"></script>
+<script>
+  initProtoBar();
+  initInlinePdp({ moduleId: 'inline-offer', buyId: 'buy', overlayId: 'detail-overlay', panelId: 'detail-panel', bagHref: 'bag.html?from=inline-mobile', sheet: true });
+</script>
+</body>
+</html>

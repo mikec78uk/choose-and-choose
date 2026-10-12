@@ -11,8 +11,10 @@
 <body>
 <div class="proto-bar">
   <strong>Choose and Choose · wireframe</strong>
-  <a href="index.html">Desktop PDP</a>
-  <a href="mobile.html">Mobile PDP</a>
+  <a href="index.html">Drawer · Desktop</a>
+  <a href="mobile.html">Drawer · Mobile</a>
+  <a href="inline.html">On-page gift · Desktop</a>
+  <a href="inline-mobile.html">On-page gift · Mobile</a>
   <a href="bag.html" aria-current="page">Bag</a>
   <button type="button" data-notes>Toggle notes</button>
   <button type="button" data-reset>Reset</button>
@@ -21,12 +23,38 @@
 <main class="bag-stage" id="bag"></main>
 
 <script src="offer.js"></script>
+<script src="inline.js"></script>
 <script>
   initProtoBar();
-  const pdp = new URLSearchParams(location.search).get('from') === 'mobile' ? 'mobile.html' : 'index.html';
+  const from = new URLSearchParams(location.search).get('from');
+  const pdp = { mobile: 'mobile.html', inline: 'inline.html', 'inline-mobile': 'inline-mobile.html' }[from] || 'index.html';
   const bag = document.getElementById('bag');
 
+  // On-page version: this product plus the gift chosen on the PDP.
+  function renderInlineBag() {
+    const p = OFFER.products[0];
+    const gifts = INLINE.gifts.filter((g) => inlineState.picked.includes(g.id));
+    let html = '<h1>Your bag (' + (1 + gifts.length) + ')</h1>';
+    if (gifts.length) {
+      html += '<div class="notice ok">Free gift added with your Protecting Hair Oil.</div>';
+    } else {
+      html += '<div class="notice warn"><strong>You haven’t chosen your free gift yet.</strong>' +
+        '<a href="' + pdp + '">Choose your free gift</a></div>';
+    }
+    html += '<div class="offer-group"><div class="group-head"><span>' + (gifts.length ? 'CHOOSE &amp; CHOOSE OFFER' : 'YOUR ITEMS') + '</span>' +
+      (gifts.length ? '<a href="' + pdp + '">Change gift</a>' : '') + '</div>' +
+      '<div class="bag-line"><div class="ph"></div><div class="info"><span class="name">' + p.name + '</span><span class="sub">' + p.sub + ' · Qty 1</span></div><span>' + p.price + '</span></div>' +
+      gifts.map((g) => '<div class="bag-line"><div class="ph">GIFT</div><div class="info"><span class="name">' + g.name + '</span>' +
+        '<span class="sub">Free gift · ' + g.worth + '</span></div><span class="free">FREE</span></div>').join('') +
+      '</div>';
+    html += '<div class="totals"><div><span>Subtotal</span><span>£11.99</span></div>' +
+      (gifts.length ? '<div class="free"><span>Gift savings</span><span>−£XX.XX</span></div>' : '') + '</div>' +
+      '<button type="button" class="btn-primary">CHECKOUT</button>';
+    bag.innerHTML = html;
+  }
+
   function renderBag() {
+    if (from === 'inline' || from === 'inline-mobile') { renderInlineBag(); return; }
     const chosen = OFFER.products.filter((p) => state.qty[p.id] > 0);
     const gifts = OFFER.gifts.filter((g) => state.picked.includes(g.id));
     const complete = isComplete();
