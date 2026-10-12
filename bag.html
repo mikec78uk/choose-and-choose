@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Choose and Choose · Bag</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="proto-bar">
+  <strong>Choose and Choose · wireframe</strong>
+  <a href="index.html">Desktop PDP</a>
+  <a href="mobile.html">Mobile PDP</a>
+  <a href="bag.html" aria-current="page">Bag</a>
+  <button type="button" data-notes>Toggle notes</button>
+  <button type="button" data-reset>Reset</button>
+</div>
+
+<main class="bag-stage" id="bag"></main>
+
+<script src="offer.js"></script>
+<script>
+  initProtoBar();
+  const pdp = new URLSearchParams(location.search).get('from') === 'mobile' ? 'mobile.html' : 'index.html';
+  const bag = document.getElementById('bag');
+
+  function renderBag() {
+    const chosen = OFFER.products.filter((p) => state.qty[p.id] > 0);
+    const gifts = OFFER.gifts.filter((g) => state.picked.includes(g.id));
+    const complete = isComplete();
+    const count = totalChosen() + gifts.length;
+
+    let html = '<h1>Your bag (' + count + ')</h1>';
+    if (chosen.length === 0) {
+      html += '<p class="hint">Your bag is empty. <a href="' + pdp + '">Back to the product</a></p>';
+      bag.innerHTML = html;
+      return;
+    }
+    if (complete && gifts.length) {
+      html += '<div class="notice ok">Choose &amp; Choose offer added: your gift is free.</div>';
+    } else if (!complete && gifts.length) {
+      html += '<div class="notice warn"><span class="note" aria-hidden="true">!</span>' +
+        '<strong>Your offer needs ' + plural(remaining(), 'more product') + ' to keep your free gift.</strong>' +
+        '<a href="' + pdp + '?offer=open">Choose a product</a></div>';
+    }
+
+    html += '<div class="offer-group"><div class="group-head"><span>CHOOSE &amp; CHOOSE OFFER</span><a href="' + pdp + '?offer=open">Edit offer</a></div>';
+    html += chosen.map((p) =>
+      '<div class="bag-line"><div class="ph"></div><div class="info"><span class="name">' + p.name + '</span>' +
+      '<span class="sub">' + p.sub + ' · Qty ' + state.qty[p.id] + '</span>' +
+      '<button type="button" class="link-btn" data-remove="' + p.id + '" style="align-self:flex-start">Remove one</button></div>' +
+      '<span>' + p.price + '</span></div>').join('');
+    html += gifts.map((g) =>
+      '<div class="bag-line' + (complete ? '' : ' on-hold') + '"><div class="ph">GIFT</div><div class="info"><span class="name">' + g.name + '</span>' +
+      '<span class="sub">Free gift · ' + g.worth + (complete ? '' : ' · on hold') + '</span></div><span class="free">FREE</span></div>').join('');
+    html += '</div>';
+
+    html += '<div class="totals"><div><span>Subtotal</span><span>[SUBTOTAL]</span></div>' +
+      '<div class="free"><span>Gift savings</span><span>−£XX.XX</span></div></div>' +
+      '<button type="button" class="btn-primary"' + (complete ? '' : ' disabled') + '>CHECKOUT</button>';
+    bag.innerHTML = html;
+  }
+
+  bag.addEventListener('click', (e) => {
+    const t = e.target.closest('[data-remove]');
+    if (!t) return;
+    const id = t.dataset.remove;
+    state.qty[id] = Math.max((state.qty[id] || 0) - 1, 0);
+    state.step = 1;
+    saveState();
+    renderBag();
+  });
+
+  renderBag();
+</script>
+</body>
+</html>
